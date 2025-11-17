@@ -107,10 +107,6 @@ export default function NotificationsCard() {
         style={styles.cardGradient}
       >
         <BlurView intensity={30} style={styles.blurContainer}>
-          <View style={styles.header}>
-            <Text style={styles.title}>Notificações</Text>
-          </View>
-
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -287,15 +283,6 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     overflow: "hidden",
     padding: 24,
-  },
-  header: {
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: Colors.text.primary,
-    letterSpacing: -0.5,
   },
   tabsContainer: {
     marginBottom: 16,
