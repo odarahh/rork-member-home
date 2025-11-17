@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Modal, Pressable } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { BlurView } from "expo-blur";
-import { AlertCircle, X } from "lucide-react-native";
+import { X } from "lucide-react-native";
 import Colors from "@/constants/colors";
 
 interface Alert {
@@ -42,10 +42,6 @@ export default function AlertCard({ alerts }: AlertCardProps) {
                       onPress={() => setSelectedAlert(alert)}
                       activeOpacity={0.7}
                     >
-                      <View style={styles.iconContainer}>
-                        <AlertCircle size={18} color={Colors.primary} strokeWidth={2.5} />
-                      </View>
-                      
                       <View style={styles.alertContent}>
                         <Text style={styles.alertTitle}>
                           {alert.title}
@@ -87,10 +83,6 @@ export default function AlertCard({ alerts }: AlertCardProps) {
             >
               <BlurView intensity={50} style={styles.modalBlur}>
                 <View style={styles.modalHeader}>
-                  <View style={styles.modalIconContainer}>
-                    <View style={styles.modalIconGlow} />
-                    <AlertCircle size={28} color={Colors.primary} strokeWidth={2.5} />
-                  </View>
                   <TouchableOpacity
                     style={styles.closeButton}
                     onPress={() => setSelectedAlert(null)}
@@ -155,17 +147,7 @@ const styles = StyleSheet.create({
   alertItem: {
     flexDirection: "row",
     alignItems: "flex-start",
-    gap: 14,
     paddingVertical: 16,
-  },
-  iconContainer: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    justifyContent: "center",
-    alignItems: "center",
-    flexShrink: 0,
-    backgroundColor: "rgba(64, 137, 255, 0.15)",
   },
   alertContent: {
     flex: 1,
@@ -188,7 +170,6 @@ const styles = StyleSheet.create({
   divider: {
     height: 1,
     backgroundColor: "rgba(51, 51, 51, 0.3)",
-    marginLeft: 50,
   },
   modalOverlay: {
     flex: 1,
@@ -215,28 +196,9 @@ const styles = StyleSheet.create({
   modalHeader: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     padding: 24,
     paddingBottom: 16,
-  },
-  modalIconContainer: {
-    position: "relative",
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: "rgba(64, 137, 255, 0.1)",
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "rgba(64, 137, 255, 0.2)",
-  },
-  modalIconGlow: {
-    position: "absolute",
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: Colors.primary,
-    opacity: 0.2,
   },
   closeButton: {
     width: 40,
