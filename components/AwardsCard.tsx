@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { Award, CheckCircle, Calendar, Trophy, Gift, Star } from "lucide-react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { BlurView } from "expo-blur";
@@ -52,6 +52,26 @@ const mockAwards: AwardItem[] = [
 ];
 
 export default function AwardsCard() {
+  const [awards, setAwards] = useState<AwardItem[]>(mockAwards);
+
+  const handleClaimAward = (awardId: string) => {
+    setAwards((prevAwards) =>
+      prevAwards.map((award) =>
+        award.id === awardId
+          ? {
+              ...award,
+              available: false,
+              redeemDate: new Date().toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: '2-digit',
+              }),
+            }
+          : award
+      )
+    );
+  };
+
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -73,13 +93,18 @@ export default function AwardsCard() {
             style={styles.awardsList}
             showsVerticalScrollIndicator={false}
           >
-            {mockAwards.map((award, index) => {
+            {awards.map((award, index) => {
               const IconComponent = ICON_MAP[award.icon];
               const isLast = index === mockAwards.length - 1;
 
               return (
                 <View key={award.id}>
-                  <View style={styles.awardItem}>
+                  <TouchableOpacity
+                    style={styles.awardItem}
+                    onPress={() => award.available && handleClaimAward(award.id)}
+                    activeOpacity={award.available ? 0.7 : 1}
+                    disabled={!award.available}
+                  >
                     <View style={styles.awardIconContainer}>
                       <View
                         style={[
@@ -127,8 +152,14 @@ export default function AwardsCard() {
                           />
                         </View>
                       )}
+
+                      {award.available && (
+                        <View style={styles.claimButton}>
+                          <Text style={styles.claimButtonText}>Capturar</Text>
+                        </View>
+                      )}
                     </View>
-                  </View>
+                  </TouchableOpacity>
 
                   {!isLast && <View style={styles.itemDivider} />}
                 </View>
@@ -275,5 +306,18 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: "rgba(51, 51, 51, 0.2)",
     marginLeft: 64,
+  },
+  claimButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 16,
+    backgroundColor: Colors.primary,
+    marginLeft: 8,
+  },
+  claimButtonText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "white",
+    letterSpacing: 0.3,
   },
 });
