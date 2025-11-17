@@ -4,16 +4,11 @@ import {
   Text,
   View,
   ScrollView,
-  Image,
   StatusBar,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { Star, Play, Trophy } from "lucide-react-native";
-import { BlurView } from "expo-blur";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import CircularProgress from "@/components/CircularProgress";
-import StatCard from "@/components/StatCard";
-import TaskProgress from "@/components/TaskProgress";
+import MyProgressCard from "@/components/MyProgressCard";
 import EventCard from "@/components/EventCard";
 import NotificationsCard from "@/components/NotificationsCard";
 import RevenueChart from "@/components/RevenueChart";
@@ -31,7 +26,7 @@ export default function ProgressScreen() {
   const userLevel = 6;
   const userScore = 620;
   const classesWatched = 10;
-  const ranking = "15º lugar";
+
   const tasksCompleted = 9;
   const totalTasks = 18;
 
@@ -51,79 +46,16 @@ export default function ProgressScreen() {
           colors={["#0a0a0a", "#0f0f0f", "#0a0a0a"]}
           style={styles.gradient}
         >
-          <View style={styles.header}>
-            <View style={styles.headerIcon}>
-              <View style={styles.iconGlow} />
-              <Trophy size={20} color={Colors.primary} strokeWidth={2.5} />
-            </View>
-            <Text style={styles.headerTitle}>Meu progresso</Text>
-          </View>
-
-          <View style={styles.mainCard}>
-            <LinearGradient
-              colors={["rgba(26, 26, 26, 0.8)", "rgba(30, 30, 30, 0.6)", "rgba(22, 22, 22, 0.8)"]}
-              style={styles.cardGradient}
-            >
-              <BlurView intensity={30} style={styles.blurContainer}>
-                <View style={styles.progressSection}>
-                  <CircularProgress
-                    progress={userProgress}
-                    size={180}
-                    strokeWidth={10}
-                    showLevel
-                    level={userLevel}
-                  >
-                    <View style={styles.avatarContainer}>
-                      <LinearGradient
-                        colors={[Colors.primary, Colors.primaryLight]}
-                        style={styles.avatarGradient}
-                      >
-                        <Image
-                          source={{
-                            uri: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&h=200&fit=crop",
-                          }}
-                          style={styles.avatar}
-                        />
-                      </LinearGradient>
-                    </View>
-                  </CircularProgress>
-
-                  <View style={styles.progressInfo}>
-                    <Text style={styles.progressLabel}>Progresso</Text>
-                    <Text style={styles.progressValue}>{userProgress}%</Text>
-                  </View>
-                </View>
-
-                <View style={styles.divider} />
-
-                <View style={styles.statsGrid}>
-                  <StatCard
-                    icon={Star}
-                    label="Pontuação"
-                    value={userScore}
-                    iconColor="#FFB800"
-                  />
-                  <View style={styles.statDivider} />
-                  <StatCard
-                    icon={Play}
-                    label="Aulas assistidas"
-                    value={classesWatched}
-                    iconColor="#4CAF50"
-                  />
-                  <View style={styles.statDivider} />
-                  <StatCard
-                    icon={Trophy}
-                    label="Ranking"
-                    value={ranking}
-                    iconColor="#FF6B6B"
-                  />
-                </View>
-              </BlurView>
-            </LinearGradient>
-          </View>
-
-          <View style={styles.tasksSection}>
-            <TaskProgress completed={tasksCompleted} total={totalTasks} />
+          <View style={styles.progressCardSection}>
+            <MyProgressCard
+              level={userLevel}
+              progress={userProgress}
+              points={userScore}
+              watchedClasses={classesWatched}
+              ranking={15}
+              tasksCompleted={tasksCompleted}
+              totalTasks={totalTasks}
+            />
           </View>
 
           <View style={styles.eventsSection}>
@@ -323,106 +255,8 @@ const styles = StyleSheet.create({
   gradient: {
     flex: 1,
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
+  progressCardSection: {
     marginBottom: 20,
-  },
-  headerIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "rgba(64, 137, 255, 0.1)",
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "rgba(64, 137, 255, 0.2)",
-    position: "relative",
-  },
-  iconGlow: {
-    position: "absolute",
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: Colors.primary,
-    opacity: 0.15,
-    transform: [{ scale: 1.2 }],
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: Colors.text.primary,
-    letterSpacing: -0.5,
-  },
-  mainCard: {
-    borderRadius: 24,
-    overflow: "hidden",
-    borderWidth: 1,
-    borderColor: "rgba(42, 42, 42, 0.5)",
-  },
-  cardGradient: {
-    padding: 2,
-  },
-  blurContainer: {
-    borderRadius: 22,
-    overflow: "hidden",
-    padding: 32,
-  },
-  progressSection: {
-    alignItems: "center",
-    gap: 20,
-  },
-  avatarContainer: {
-    position: "relative",
-  },
-  avatarGradient: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
-    padding: 3,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  avatar: {
-    width: 84,
-    height: 84,
-    borderRadius: 42,
-    backgroundColor: "#1a1a1a",
-  },
-  progressInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  progressLabel: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: Colors.text.secondary,
-  },
-  progressValue: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: Colors.primary,
-    letterSpacing: -0.5,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: "rgba(51, 51, 51, 0.3)",
-    marginVertical: 24,
-  },
-  statsGrid: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  statDivider: {
-    width: 1,
-    height: 60,
-    backgroundColor: "rgba(51, 51, 51, 0.3)",
-  },
-  tasksSection: {
-    marginTop: 20,
   },
   eventsSection: {
     marginTop: 24,
