@@ -146,8 +146,7 @@ export default function RevenueChart() {
           </View>
         </View>
         <TouchableOpacity style={styles.addButton} onPress={() => setShowAddModal(true)}>
-          <Plus size={18} color="white" strokeWidth={2.5} />
-          <Text style={styles.addButtonText}>Adicionar Faturamento</Text>
+          <Plus size={20} color="white" strokeWidth={2.5} />
         </TouchableOpacity>
       </View>
 
@@ -417,19 +416,16 @@ const styles = StyleSheet.create({
     color: "#FF6B6B",
   },
   addButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 12,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     backgroundColor: Colors.primary,
-  },
-  addButtonText: {
-    fontSize: 14,
-    fontWeight: "600" as const,
-    color: "white",
-    letterSpacing: -0.2,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: Colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
   },
   cardGradient: {
     borderRadius: 20,
