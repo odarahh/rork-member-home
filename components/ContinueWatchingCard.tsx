@@ -22,6 +22,7 @@ interface Content {
   currentLesson: number;
   totalLessons: number;
   isLiked: boolean;
+  isFavorited: boolean;
   userRating?: number;
 }
 
@@ -29,6 +30,7 @@ interface ContinueWatchingCardProps {
   content: Content;
   onAccessContent?: (contentId: string) => void;
   onToggleLike?: (contentId: string) => void;
+  onToggleFavorite?: (contentId: string) => void;
   onRate?: (contentId: string, rating: number, comment: string) => void;
   onGetCertificate?: (contentId: string) => void;
 }
@@ -37,6 +39,7 @@ export default function ContinueWatchingCard({
   content,
   onAccessContent,
   onToggleLike,
+  onToggleFavorite,
   onRate,
   onGetCertificate,
 }: ContinueWatchingCardProps) {
@@ -45,14 +48,16 @@ export default function ContinueWatchingCard({
   const [comment, setComment] = useState("");
 
   const handleToggleLike = () => {
+    console.log(`Toggling like for content: ${content.id}`);
     onToggleLike?.(content.id);
   };
 
-  const handleOpenRatingModal = () => {
-    setSelectedRating(content.userRating || 0);
-    setComment("");
-    setRatingModalVisible(true);
+  const handleToggleFavorite = () => {
+    console.log(`Toggling favorite for content: ${content.id}`);
+    onToggleFavorite?.(content.id);
   };
+
+
 
   const handleSubmitRating = () => {
     if (selectedRating > 0) {
@@ -135,14 +140,14 @@ export default function ContinueWatchingCard({
 
                   <TouchableOpacity
                     style={styles.iconButton}
-                    onPress={handleOpenRatingModal}
+                    onPress={handleToggleFavorite}
                     activeOpacity={0.7}
                   >
                     <Star
                       size={22}
-                      color={content.userRating ? "#FFB800" : Colors.text.secondary}
+                      color={content.isFavorited ? "#FFB800" : Colors.text.secondary}
                       strokeWidth={2}
-                      fill={content.userRating ? "#FFB800" : "transparent"}
+                      fill={content.isFavorited ? "#FFB800" : "transparent"}
                     />
                   </TouchableOpacity>
                 </View>

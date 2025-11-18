@@ -5,12 +5,11 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  Modal,
-  Pressable,
+
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { BlurView } from "expo-blur";
-import { Trophy, Info, X } from "lucide-react-native";
+import { Trophy } from "lucide-react-native";
 import Colors from "@/constants/colors";
 
 interface Member {
@@ -70,7 +69,6 @@ export default function EngagedMembersCard({
   onViewFullRanking,
 }: EngagedMembersCardProps) {
   const [selectedPeriod, setSelectedPeriod] = useState<Period>("Semana");
-  const [infoModalVisible, setInfoModalVisible] = useState(false);
 
   const renderMemberItem = (member: Member) => {
     const isTopThree = member.rank <= 3;
@@ -126,14 +124,6 @@ export default function EngagedMembersCard({
                 </View>
                 <Text style={styles.title}>Mais Engajados</Text>
               </View>
-
-              <TouchableOpacity
-                style={styles.infoButton}
-                onPress={() => setInfoModalVisible(true)}
-                activeOpacity={0.7}
-              >
-                <Info size={20} color={Colors.text.secondary} strokeWidth={2} />
-              </TouchableOpacity>
             </View>
 
             <View style={styles.filtersContainer}>
@@ -181,77 +171,7 @@ export default function EngagedMembersCard({
         </LinearGradient>
       </View>
 
-      <Modal
-        visible={infoModalVisible}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setInfoModalVisible(false)}
-      >
-        <Pressable
-          style={styles.modalOverlay}
-          onPress={() => setInfoModalVisible(false)}
-        >
-          <Pressable style={styles.modalContent} onPress={(e) => e.stopPropagation()}>
-            <LinearGradient
-              colors={[
-                "rgba(26, 26, 26, 0.98)",
-                "rgba(30, 30, 30, 0.98)",
-                "rgba(22, 22, 22, 0.98)",
-              ]}
-              style={styles.modalGradient}
-            >
-              <BlurView intensity={80} style={styles.modalBlur}>
-                <View style={styles.modalHeader}>
-                  <Text style={styles.modalTitle}>Regras da Gamificação</Text>
-                  <TouchableOpacity
-                    onPress={() => setInfoModalVisible(false)}
-                    style={styles.closeButton}
-                  >
-                    <X size={24} color={Colors.text.secondary} strokeWidth={2} />
-                  </TouchableOpacity>
-                </View>
 
-                <View style={styles.modalBody}>
-                  <View style={styles.ruleItem}>
-                    <View style={styles.ruleDot} />
-                    <Text style={styles.ruleText}>
-                      Complete tarefas e aulas para ganhar XP
-                    </Text>
-                  </View>
-
-                  <View style={styles.ruleItem}>
-                    <View style={styles.ruleDot} />
-                    <Text style={styles.ruleText}>
-                      Quanto mais ativo, mais pontos você acumula
-                    </Text>
-                  </View>
-
-                  <View style={styles.ruleItem}>
-                    <View style={styles.ruleDot} />
-                    <Text style={styles.ruleText}>
-                      O ranking é atualizado em tempo real
-                    </Text>
-                  </View>
-
-                  <View style={styles.ruleItem}>
-                    <View style={styles.ruleDot} />
-                    <Text style={styles.ruleText}>
-                      Os 3 primeiros colocados recebem destaque especial
-                    </Text>
-                  </View>
-
-                  <View style={styles.ruleItem}>
-                    <View style={styles.ruleDot} />
-                    <Text style={styles.ruleText}>
-                      Participe de eventos para ganhar pontos extras
-                    </Text>
-                  </View>
-                </View>
-              </BlurView>
-            </LinearGradient>
-          </Pressable>
-        </Pressable>
-      </Modal>
     </>
   );
 }
@@ -307,16 +227,7 @@ const styles = StyleSheet.create({
     color: Colors.text.primary,
     letterSpacing: -0.5,
   },
-  infoButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: "rgba(42, 42, 42, 0.3)",
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "rgba(51, 51, 51, 0.3)",
-  },
+
   filtersContainer: {
     flexDirection: "row",
     gap: 8,
@@ -427,72 +338,5 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "white",
     letterSpacing: -0.3,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  },
-  modalContent: {
-    width: "100%",
-    maxWidth: 400,
-    borderRadius: 24,
-    overflow: "hidden",
-    borderWidth: 1,
-    borderColor: "rgba(64, 137, 255, 0.2)",
-  },
-  modalGradient: {
-    padding: 2,
-  },
-  modalBlur: {
-    borderRadius: 22,
-    overflow: "hidden",
-    padding: 24,
-  },
-  modalHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 24,
-  },
-  modalTitle: {
-    fontSize: 22,
-    fontWeight: "700",
-    color: Colors.text.primary,
-    letterSpacing: -0.5,
-  },
-  closeButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: "rgba(42, 42, 42, 0.3)",
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "rgba(51, 51, 51, 0.3)",
-  },
-  modalBody: {
-    gap: 20,
-  },
-  ruleItem: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    gap: 12,
-  },
-  ruleDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: Colors.primary,
-    marginTop: 6,
-  },
-  ruleText: {
-    flex: 1,
-    fontSize: 15,
-    fontWeight: "400",
-    color: Colors.text.secondary,
-    lineHeight: 22,
   },
 });

@@ -290,15 +290,18 @@ const styles = StyleSheet.create({
   },
   tabsContent: {
     gap: 8,
-    paddingRight: 24,
+    paddingHorizontal: 4,
+    justifyContent: "center",
   },
   tab: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 18,
     paddingVertical: 10,
     borderRadius: 20,
     backgroundColor: "rgba(42, 42, 42, 0.3)",
     borderWidth: 1,
     borderColor: "rgba(51, 51, 51, 0.3)",
+    minWidth: 90,
+    alignItems: "center",
   },
   tabActive: {
     backgroundColor: "rgba(64, 137, 255, 0.15)",

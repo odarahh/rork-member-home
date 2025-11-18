@@ -146,10 +146,12 @@ export default function ProgressScreen() {
                 currentLesson: 13,
                 totalLessons: 20,
                 isLiked: true,
+                isFavorited: false,
                 userRating: 5,
               }}
               onAccessContent={(id) => console.log('Acessar conteúdo:', id)}
               onToggleLike={(id) => console.log('Toggle like:', id)}
+              onToggleFavorite={(id) => console.log('Toggle favorite:', id)}
               onRate={(id, rating, comment) => console.log('Avaliar:', id, rating, comment)}
               onGetCertificate={(id) => console.log('Obter certificado:', id)}
             />
@@ -164,10 +166,12 @@ export default function ProgressScreen() {
                   currentLesson: 32,
                   totalLessons: 32,
                   isLiked: false,
+                  isFavorited: true,
                   userRating: 0,
                 }}
                 onAccessContent={(id) => console.log('Acessar conteúdo:', id)}
                 onToggleLike={(id) => console.log('Toggle like:', id)}
+                onToggleFavorite={(id) => console.log('Toggle favorite:', id)}
                 onRate={(id, rating, comment) => console.log('Avaliar:', id, rating, comment)}
                 onGetCertificate={(id) => console.log('Obter certificado:', id)}
               />

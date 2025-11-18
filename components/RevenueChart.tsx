@@ -124,37 +124,36 @@ export default function RevenueChart() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <View style={styles.headerIcon}>
-            <View style={styles.iconGlow} />
-            <DollarSign size={20} color={Colors.primary} strokeWidth={2.5} />
-          </View>
-          <View>
-            <Text style={styles.title}>Faturamento</Text>
-            <View style={styles.valueRow}>
-              <Text style={styles.mainValue}>
-                R$ {(totalRevenue / 1000).toFixed(3).replace('.', ',')}
-              </Text>
-              <View style={[styles.changeIndicator, isNegative && styles.changeIndicatorNegative]}>
-                <TrendingDown size={12} color={isNegative ? "#FF6B6B" : "#4CAF50"} />
-                <Text style={[styles.changeText, isNegative && styles.changeTextNegative]}>
-                  {changePercent}%
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
-        <TouchableOpacity style={styles.addButton} onPress={() => setShowAddModal(true)}>
-          <Plus size={20} color="white" strokeWidth={2.5} />
-        </TouchableOpacity>
-      </View>
-
       <LinearGradient
         colors={["rgba(26, 26, 26, 0.8)", "rgba(30, 30, 30, 0.6)", "rgba(22, 22, 22, 0.8)"]}
         style={styles.cardGradient}
       >
         <BlurView intensity={30} style={styles.blurContainer}>
+          <View style={styles.header}>
+            <View style={styles.headerLeft}>
+              <View style={styles.headerIcon}>
+                <View style={styles.iconGlow} />
+                <DollarSign size={20} color={Colors.primary} strokeWidth={2.5} />
+              </View>
+              <View>
+                <Text style={styles.title}>Faturamento</Text>
+                <View style={styles.valueRow}>
+                  <Text style={styles.mainValue}>
+                    R$ {(totalRevenue / 1000).toFixed(3).replace('.', ',')}
+                  </Text>
+                  <View style={[styles.changeIndicator, isNegative && styles.changeIndicatorNegative]}>
+                    <TrendingDown size={12} color={isNegative ? "#FF6B6B" : "#4CAF50"} />
+                    <Text style={[styles.changeText, isNegative && styles.changeTextNegative]}>
+                      {changePercent}%
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <TouchableOpacity style={styles.addButton} onPress={() => setShowAddModal(true)}>
+              <Plus size={20} color="white" strokeWidth={2.5} />
+            </TouchableOpacity>
+          </View>
           <View style={styles.chartWrapper}>
             <View style={styles.yAxisLabels}>
               <Text style={styles.yAxisLabel}>{(maxRevenue / 1000).toFixed(0)}k</Text>
@@ -344,7 +343,10 @@ export default function RevenueChart() {
 
 const styles = StyleSheet.create({
   container: {
-    gap: 16,
+    borderRadius: 24,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "rgba(42, 42, 42, 0.5)",
   },
   header: {
     flexDirection: "row",
@@ -428,14 +430,11 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
   },
   cardGradient: {
-    borderRadius: 20,
-    overflow: "hidden",
-    borderWidth: 1,
-    borderColor: "rgba(42, 42, 42, 0.5)",
+    padding: 2,
   },
   blurContainer: {
-    padding: 24,
-    borderRadius: 18,
+    padding: 20,
+    borderRadius: 22,
     overflow: "hidden",
   },
   chartWrapper: {
