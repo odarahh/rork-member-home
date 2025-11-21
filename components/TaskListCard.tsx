@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
   Modal,
   Pressable,
 } from "react-native";
@@ -208,11 +207,7 @@ export default function TaskListCard() {
         </TouchableOpacity>
       </View>
 
-      <ScrollView
-        style={styles.taskList}
-        showsVerticalScrollIndicator={true}
-        persistentScrollbar={true}
-      >
+      <View style={styles.taskList}>
         {filteredTasks.map((task) => (
           <View key={task.id} style={styles.taskItem}>
             <TouchableOpacity
@@ -251,7 +246,7 @@ export default function TaskListCard() {
             </TouchableOpacity>
           </View>
         ))}
-      </ScrollView>
+      </View>
 
       <Modal
         visible={modalVisible}
@@ -283,29 +278,6 @@ export default function TaskListCard() {
                   <Text style={styles.modalDescription}>
                     {selectedTask.description}
                   </Text>
-                </View>
-
-                <View style={styles.modalSection}>
-                  <Text style={styles.modalLabel}>Status</Text>
-                  <View
-                    style={[
-                      styles.statusBadge,
-                      selectedTask.completed
-                        ? styles.statusBadgeCompleted
-                        : styles.statusBadgeOpen,
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.statusText,
-                        selectedTask.completed
-                          ? styles.statusTextCompleted
-                          : styles.statusTextOpen,
-                      ]}
-                    >
-                      {selectedTask.completed ? "Concluída" : "Em aberto"}
-                    </Text>
-                  </View>
                 </View>
 
                 <TouchableOpacity
@@ -430,14 +402,14 @@ const styles = StyleSheet.create({
   taskItem: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 12,
+    paddingVertical: 8,
     paddingHorizontal: 4,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(51, 51, 51, 0.3)",
-    gap: 12,
+    gap: 10,
   },
   checkboxContainer: {
-    padding: 4,
+    padding: 2,
   },
   checkbox: {
     width: 20,
@@ -476,7 +448,7 @@ const styles = StyleSheet.create({
     textDecorationLine: "line-through",
   },
   infoButton: {
-    padding: 4,
+    padding: 2,
     borderRadius: 8,
     backgroundColor: "rgba(64, 137, 255, 0.1)",
   },
