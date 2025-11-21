@@ -228,15 +228,18 @@ export default function TaskListCard() {
               </View>
             </TouchableOpacity>
 
-            <Text
-              style={[
-                styles.taskTitle,
-                task.completed && styles.taskTitleCompleted,
-              ]}
-              numberOfLines={1}
-            >
-              {task.title}
-            </Text>
+            <View style={styles.taskTitleContainer}>
+              <Text
+                style={[
+                  styles.taskTitle,
+                  task.completed && styles.taskTitleCompleted,
+                ]}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {task.title}
+              </Text>
+            </View>
 
             <TouchableOpacity
               style={styles.infoButton}
@@ -414,6 +417,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "rgba(51, 51, 51, 0.3)",
     gap: 12,
     minHeight: 44,
+    maxWidth: "100%",
   },
   checkboxContainer: {
     padding: 2,
@@ -443,8 +447,11 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "white",
   },
-  taskTitle: {
+  taskTitleContainer: {
     flex: 1,
+    minWidth: 0,
+  },
+  taskTitle: {
     fontSize: 15,
     fontWeight: "500",
     color: "rgba(255, 255, 255, 0.85)",
