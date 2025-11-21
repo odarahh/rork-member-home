@@ -334,7 +334,7 @@ export default function TaskListCard() {
 
 const styles = StyleSheet.create({
   card: {
-    width: 760,
+    width: "100%",
     height: 320,
     backgroundColor: "#1a1a1a",
     borderRadius: 24,

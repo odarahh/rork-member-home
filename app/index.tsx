@@ -269,7 +269,6 @@ const styles = StyleSheet.create({
   },
   taskListSection: {
     marginBottom: 20,
-    alignItems: "center",
   },
   eventsSection: {
     marginTop: 24,
