@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     color: "#4089FF",
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "600",
     color: "rgba(255, 255, 255, 0.95)",
     letterSpacing: 0.3,
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   levelText: {
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: "600",
     color: "rgba(255, 255, 255, 0.9)",
     letterSpacing: 0.5,
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   progressLabel: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: "500",
     color: "rgba(255, 255, 255, 0.7)",
   },
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
     color: "rgba(255, 255, 255, 0.5)",
   },
   progressValue: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: "700",
     color: "#4089FF",
   },
@@ -274,13 +274,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   statLabel: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: "500",
     color: "rgba(255, 255, 255, 0.6)",
     textAlign: "center",
   },
   statValue: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: "700",
     color: "rgba(255, 255, 255, 0.95)",
     letterSpacing: -0.5,
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   tasksTitle: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: "600",
     color: "rgba(255, 255, 255, 0.85)",
   },
@@ -317,10 +317,10 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   tasksFraction: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: "700",
     color: "rgba(255, 255, 255, 0.95)",
-    minWidth: 48,
+    minWidth: 52,
   },
   tasksProgressBar: {
     flex: 1,
@@ -335,10 +335,10 @@ const styles = StyleSheet.create({
     borderRadius: 3,
   },
   tasksPercentage: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: "700",
     color: "#4089FF",
-    minWidth: 42,
+    minWidth: 46,
     textAlign: "right",
   },
 });

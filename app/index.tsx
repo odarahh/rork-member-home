@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "700",
     color: Colors.text.primary,
     letterSpacing: -0.5,
