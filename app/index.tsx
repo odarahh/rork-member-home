@@ -9,6 +9,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import MyProgressCard from "@/components/MyProgressCard";
+import TaskListCard from "@/components/TaskListCard";
 import EventCard from "@/components/EventCard";
 import NotificationsCard from "@/components/NotificationsCard";
 import RevenueChart from "@/components/RevenueChart";
@@ -56,6 +57,10 @@ export default function ProgressScreen() {
               tasksCompleted={tasksCompleted}
               totalTasks={totalTasks}
             />
+          </View>
+
+          <View style={styles.taskListSection}>
+            <TaskListCard />
           </View>
 
           <View style={styles.eventsSection}>
@@ -261,6 +266,10 @@ const styles = StyleSheet.create({
   },
   progressCardSection: {
     marginBottom: 20,
+  },
+  taskListSection: {
+    marginBottom: 20,
+    alignItems: "center",
   },
   eventsSection: {
     marginTop: 24,
