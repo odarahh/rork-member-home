@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { View, Text, StyleSheet, Animated } from "react-native";
+import { View, Text, StyleSheet, Animated, Image } from "react-native";
 import { Star, Play, Trophy, CheckSquare } from "lucide-react-native";
 import Svg, { Circle, Defs, LinearGradient, Stop } from "react-native-svg";
 
@@ -50,7 +50,12 @@ export default function MyProgressCard({
       <View style={styles.header}>
         <View style={styles.titleContainer}>
           <View style={styles.iconBadge}>
-            <Text style={styles.iconText}>P</Text>
+            <Image
+              source={{
+                uri: "https://pub-e001eb4506b145aa938b5d3badbff6a5.r2.dev/attachments/uvxhl6dyx259a126vlsg4",
+              }}
+              style={styles.iconImage}
+            />
           </View>
           <Text style={styles.title}>Meu progresso</Text>
         </View>
@@ -187,11 +192,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     borderColor: "rgba(64, 137, 255, 0.3)",
+    overflow: "hidden",
   },
-  iconText: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: "#4089FF",
+  iconImage: {
+    width: 20,
+    height: 20,
   },
   title: {
     fontSize: 20,
