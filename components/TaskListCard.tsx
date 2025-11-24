@@ -85,13 +85,18 @@ export default function TaskListCard() {
 
   const panResponder = useRef(
     PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
+      onStartShouldSetPanResponder: () => false,
+      onStartShouldSetPanResponderCapture: () => false,
       onMoveShouldSetPanResponder: (_, gestureState) => {
-        return Math.abs(gestureState.dy) > 5;
+        return Math.abs(gestureState.dy) > 8;
+      },
+      onMoveShouldSetPanResponderCapture: (_, gestureState) => {
+        return Math.abs(gestureState.dy) > 8;
       },
       onPanResponderGrant: () => {
-        // @ts-expect-error - _value is internal but needed for gesture tracking
-        lastY.current = scrollY._value;
+        scrollY.stopAnimation((value) => {
+          lastY.current = value;
+        });
       },
       onPanResponderMove: (_, gestureState) => {
         const newY = lastY.current - gestureState.dy;
@@ -101,22 +106,23 @@ export default function TaskListCard() {
       },
       onPanResponderRelease: (_, gestureState) => {
         const velocity = -gestureState.vy;
-        const maxScroll = Math.max(0, contentHeight.current - containerHeight.current);
         
-        if (Math.abs(velocity) > 0.5) {
-          const timeConstant = 325;
-          // @ts-expect-error - _value is internal but needed for gesture tracking
-          const destination = scrollY._value + (velocity * timeConstant);
-          const clampedDestination = Math.max(0, Math.min(destination, maxScroll));
+        if (Math.abs(velocity) > 0.3) {
+          const deceleration = 0.997;
+          const maxVelocity = Math.min(Math.abs(velocity), 3);
+          const finalVelocity = velocity > 0 ? maxVelocity : -maxVelocity;
           
-          Animated.spring(scrollY, {
-            toValue: clampedDestination,
-            velocity: velocity * 1000,
-            tension: 50,
-            friction: 10,
-            useNativeDriver: true,
-          }).start();
+          scrollY.stopAnimation(() => {
+            Animated.decay(scrollY, {
+              velocity: finalVelocity * 1000,
+              deceleration,
+              useNativeDriver: true,
+            }).start();
+          });
         }
+      },
+      onPanResponderTerminate: () => {
+        scrollY.stopAnimation();
       },
     })
   ).current;
@@ -253,23 +259,23 @@ export default function TaskListCard() {
       </View>
 
       <View 
-        style={styles.taskList}
+        style={styles.taskListWrapper}
         onLayout={(e) => {
           containerHeight.current = e.nativeEvent.layout.height;
         }}
-        {...panResponder.panHandlers}
       >
-        <Animated.View
-          style={[
-            styles.taskListContent,
-            {
-              transform: [{ translateY: Animated.multiply(scrollY, -1) }],
-            },
-          ]}
-          onLayout={(e) => {
-            contentHeight.current = e.nativeEvent.layout.height;
-          }}
-        >
+        <View style={styles.taskList} {...panResponder.panHandlers}>
+          <Animated.View
+            style={[
+              styles.taskListContent,
+              {
+                transform: [{ translateY: Animated.multiply(scrollY, -1) }],
+              },
+            ]}
+            onLayout={(e) => {
+              contentHeight.current = e.nativeEvent.layout.height;
+            }}
+          >
           {filteredTasks.map((task) => (
             <View key={task.id} style={styles.taskItem}>
               <TouchableOpacity
@@ -311,7 +317,8 @@ export default function TaskListCard() {
               </TouchableOpacity>
             </View>
           ))}
-        </Animated.View>
+          </Animated.View>
+        </View>
       </View>
 
       <Modal
@@ -463,17 +470,20 @@ const styles = StyleSheet.create({
   filterCountActive: {
     color: "#4089FF",
   },
-  taskList: {
+  taskListWrapper: {
     flex: 1,
     backgroundColor: "rgba(42, 42, 42, 0.2)",
     borderRadius: 16,
-    padding: 12,
     borderWidth: 1,
     borderColor: "rgba(51, 51, 51, 0.3)",
     overflow: "hidden",
   },
+  taskList: {
+    flex: 1,
+    padding: 12,
+  },
   taskListContent: {
-    paddingBottom: 12,
+    width: "100%",
   },
   taskItem: {
     flexDirection: "row",
@@ -483,7 +493,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "rgba(51, 51, 51, 0.3)",
     gap: 12,
-    minHeight: 44,
+    minHeight: 48,
   },
   checkboxContainer: {
     padding: 2,
