@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Modal,
   Pressable,
+  PanResponder,
+  Animated,
 } from "react-native";
 import { List, Info, X } from "lucide-react-native";
 import Svg, { Circle, Defs, LinearGradient, Stop } from "react-native-svg";
@@ -37,6 +39,11 @@ export default function TaskListCard() {
   const [filter, setFilter] = useState<FilterType>("all");
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const lastY = useRef(0);
+  const containerHeight = useRef(0);
+  const contentHeight = useRef(0);
 
   const toggleTask = (id: string) => {
     setTasks((prevTasks) =>
@@ -75,6 +82,44 @@ export default function TaskListCard() {
     setModalVisible(false);
     setSelectedTask(null);
   };
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        return Math.abs(gestureState.dy) > 5;
+      },
+      onPanResponderGrant: () => {
+        // @ts-expect-error - _value is internal but needed for gesture tracking
+        lastY.current = scrollY._value;
+      },
+      onPanResponderMove: (_, gestureState) => {
+        const newY = lastY.current - gestureState.dy;
+        const maxScroll = Math.max(0, contentHeight.current - containerHeight.current);
+        const clampedY = Math.max(0, Math.min(newY, maxScroll));
+        scrollY.setValue(clampedY);
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        const velocity = -gestureState.vy;
+        const maxScroll = Math.max(0, contentHeight.current - containerHeight.current);
+        
+        if (Math.abs(velocity) > 0.5) {
+          const timeConstant = 325;
+          // @ts-expect-error - _value is internal but needed for gesture tracking
+          const destination = scrollY._value + (velocity * timeConstant);
+          const clampedDestination = Math.max(0, Math.min(destination, maxScroll));
+          
+          Animated.spring(scrollY, {
+            toValue: clampedDestination,
+            velocity: velocity * 1000,
+            tension: 50,
+            friction: 10,
+            useNativeDriver: true,
+          }).start();
+        }
+      },
+    })
+  ).current;
 
   return (
     <View style={styles.card}>
@@ -207,48 +252,66 @@ export default function TaskListCard() {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.taskList}>
-        {filteredTasks.map((task) => (
-          <View key={task.id} style={styles.taskItem}>
-            <TouchableOpacity
-              style={styles.checkboxContainer}
-              onPress={() => toggleTask(task.id)}
-            >
-              <View
-                style={[
-                  styles.checkbox,
-                  task.completed && styles.checkboxChecked,
-                ]}
+      <View 
+        style={styles.taskList}
+        onLayout={(e) => {
+          containerHeight.current = e.nativeEvent.layout.height;
+        }}
+        {...panResponder.panHandlers}
+      >
+        <Animated.View
+          style={[
+            styles.taskListContent,
+            {
+              transform: [{ translateY: Animated.multiply(scrollY, -1) }],
+            },
+          ]}
+          onLayout={(e) => {
+            contentHeight.current = e.nativeEvent.layout.height;
+          }}
+        >
+          {filteredTasks.map((task) => (
+            <View key={task.id} style={styles.taskItem}>
+              <TouchableOpacity
+                style={styles.checkboxContainer}
+                onPress={() => toggleTask(task.id)}
               >
-                {task.completed && (
-                  <View style={styles.checkmark}>
-                    <Text style={styles.checkmarkText}>✓</Text>
-                  </View>
-                )}
+                <View
+                  style={[
+                    styles.checkbox,
+                    task.completed && styles.checkboxChecked,
+                  ]}
+                >
+                  {task.completed && (
+                    <View style={styles.checkmark}>
+                      <Text style={styles.checkmarkText}>✓</Text>
+                    </View>
+                  )}
+                </View>
+              </TouchableOpacity>
+
+              <View style={styles.taskTitleContainer}>
+                <Text
+                  style={[
+                    styles.taskTitle,
+                    task.completed && styles.taskTitleCompleted,
+                  ]}
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                >
+                  {task.title}
+                </Text>
               </View>
-            </TouchableOpacity>
 
-            <View style={styles.taskTitleContainer}>
-              <Text
-                style={[
-                  styles.taskTitle,
-                  task.completed && styles.taskTitleCompleted,
-                ]}
-                numberOfLines={1}
-                ellipsizeMode="tail"
+              <TouchableOpacity
+                style={styles.infoButton}
+                onPress={() => openTaskDetail(task)}
               >
-                {task.title}
-              </Text>
+                <Info size={18} color="#4089FF" strokeWidth={2} />
+              </TouchableOpacity>
             </View>
-
-            <TouchableOpacity
-              style={styles.infoButton}
-              onPress={() => openTaskDetail(task)}
-            >
-              <Info size={18} color="#4089FF" strokeWidth={2} />
-            </TouchableOpacity>
-          </View>
-        ))}
+          ))}
+        </Animated.View>
       </View>
 
       <Modal
@@ -407,6 +470,10 @@ const styles = StyleSheet.create({
     padding: 12,
     borderWidth: 1,
     borderColor: "rgba(51, 51, 51, 0.3)",
+    overflow: "hidden",
+  },
+  taskListContent: {
+    paddingBottom: 12,
   },
   taskItem: {
     flexDirection: "row",
