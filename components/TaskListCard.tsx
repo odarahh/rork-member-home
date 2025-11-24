@@ -417,10 +417,10 @@ const styles = StyleSheet.create({
     borderBottomColor: "rgba(51, 51, 51, 0.3)",
     gap: 12,
     minHeight: 44,
-    maxWidth: "100%",
   },
   checkboxContainer: {
     padding: 2,
+    flexShrink: 0,
   },
   checkbox: {
     width: 24,
@@ -450,6 +450,7 @@ const styles = StyleSheet.create({
   taskTitleContainer: {
     flex: 1,
     minWidth: 0,
+    overflow: "hidden",
   },
   taskTitle: {
     fontSize: 15,
@@ -470,6 +471,7 @@ const styles = StyleSheet.create({
     minHeight: 36,
     justifyContent: "center",
     alignItems: "center",
+    flexShrink: 0,
   },
   modalOverlay: {
     flex: 1,
