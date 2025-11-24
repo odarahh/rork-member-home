@@ -502,6 +502,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 12,
     paddingTop: 8,
+    overflow: "hidden",
   },
   taskItem: {
     flexDirection: "row",
@@ -512,6 +513,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "rgba(51, 51, 51, 0.3)",
     gap: 12,
     minHeight: 52,
+    width: "100%",
   },
   taskItemLast: {
     borderBottomWidth: 0,
@@ -549,7 +551,6 @@ const styles = StyleSheet.create({
   taskTitleContainer: {
     flex: 1,
     minWidth: 0,
-    overflow: "hidden",
   },
   taskTitle: {
     fontSize: 15,
