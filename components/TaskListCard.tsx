@@ -85,13 +85,13 @@ export default function TaskListCard() {
 
   const panResponder = useRef(
     PanResponder.create({
-      onStartShouldSetPanResponder: () => false,
+      onStartShouldSetPanResponder: () => true,
       onStartShouldSetPanResponderCapture: () => false,
       onMoveShouldSetPanResponder: (_, gestureState) => {
-        return Math.abs(gestureState.dy) > 8;
+        return Math.abs(gestureState.dy) > 5;
       },
       onMoveShouldSetPanResponderCapture: (_, gestureState) => {
-        return Math.abs(gestureState.dy) > 8;
+        return Math.abs(gestureState.dy) > 5;
       },
       onPanResponderGrant: () => {
         scrollY.stopAnimation((value) => {
@@ -106,23 +106,37 @@ export default function TaskListCard() {
       },
       onPanResponderRelease: (_, gestureState) => {
         const velocity = -gestureState.vy;
+        const maxScroll = Math.max(0, contentHeight.current - containerHeight.current);
         
-        if (Math.abs(velocity) > 0.3) {
-          const deceleration = 0.997;
-          const maxVelocity = Math.min(Math.abs(velocity), 3);
+        if (Math.abs(velocity) > 0.5) {
+          const deceleration = 0.995;
+          const maxVelocity = Math.min(Math.abs(velocity), 4);
           const finalVelocity = velocity > 0 ? maxVelocity : -maxVelocity;
           
-          scrollY.stopAnimation(() => {
+          scrollY.stopAnimation((currentValue) => {
+            lastY.current = currentValue;
             Animated.decay(scrollY, {
               velocity: finalVelocity * 1000,
               deceleration,
               useNativeDriver: true,
-            }).start();
+            }).start(({ finished }) => {
+              if (finished) {
+                scrollY.stopAnimation((finalValue) => {
+                  const clampedValue = Math.max(0, Math.min(finalValue, maxScroll));
+                  scrollY.setValue(clampedValue);
+                  lastY.current = clampedValue;
+                });
+              }
+            });
           });
+        } else {
+          lastY.current = Math.max(0, Math.min(lastY.current - gestureState.dy, maxScroll));
         }
       },
       onPanResponderTerminate: () => {
-        scrollY.stopAnimation();
+        scrollY.stopAnimation((value) => {
+          lastY.current = value;
+        });
       },
     })
   ).current;
@@ -264,60 +278,62 @@ export default function TaskListCard() {
           containerHeight.current = e.nativeEvent.layout.height;
         }}
       >
-        <View style={styles.taskList} {...panResponder.panHandlers}>
-          <Animated.View
-            style={[
-              styles.taskListContent,
-              {
+        <View style={styles.taskList}>
+          <View {...panResponder.panHandlers} style={styles.scrollContainer}>
+            <Animated.View
+              style={[{
                 transform: [{ translateY: Animated.multiply(scrollY, -1) }],
-              },
-            ]}
-            onLayout={(e) => {
-              contentHeight.current = e.nativeEvent.layout.height;
-            }}
-          >
-          {filteredTasks.map((task) => (
-            <View key={task.id} style={styles.taskItem}>
-              <TouchableOpacity
-                style={styles.checkboxContainer}
-                onPress={() => toggleTask(task.id)}
-              >
-                <View
-                  style={[
-                    styles.checkbox,
-                    task.completed && styles.checkboxChecked,
-                  ]}
+              }]}
+              onLayout={(e) => {
+                contentHeight.current = e.nativeEvent.layout.height;
+              }}
+            >
+            {filteredTasks.map((task, index) => (
+              <View key={task.id} style={[
+                styles.taskItem,
+                index === filteredTasks.length - 1 && styles.taskItemLast
+              ]}>
+                <TouchableOpacity
+                  style={styles.checkboxContainer}
+                  onPress={() => toggleTask(task.id)}
                 >
-                  {task.completed && (
-                    <View style={styles.checkmark}>
-                      <Text style={styles.checkmarkText}>✓</Text>
-                    </View>
-                  )}
+                  <View
+                    style={[
+                      styles.checkbox,
+                      task.completed && styles.checkboxChecked,
+                    ]}
+                  >
+                    {task.completed && (
+                      <View style={styles.checkmark}>
+                        <Text style={styles.checkmarkText}>✓</Text>
+                      </View>
+                    )}
+                  </View>
+                </TouchableOpacity>
+
+                <View style={styles.taskTitleContainer}>
+                  <Text
+                    style={[
+                      styles.taskTitle,
+                      task.completed && styles.taskTitleCompleted,
+                    ]}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {task.title}
+                  </Text>
                 </View>
-              </TouchableOpacity>
 
-              <View style={styles.taskTitleContainer}>
-                <Text
-                  style={[
-                    styles.taskTitle,
-                    task.completed && styles.taskTitleCompleted,
-                  ]}
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
+                <TouchableOpacity
+                  style={styles.infoButton}
+                  onPress={() => openTaskDetail(task)}
                 >
-                  {task.title}
-                </Text>
+                  <Info size={18} color="#4089FF" strokeWidth={2} />
+                </TouchableOpacity>
               </View>
-
-              <TouchableOpacity
-                style={styles.infoButton}
-                onPress={() => openTaskDetail(task)}
-              >
-                <Info size={18} color="#4089FF" strokeWidth={2} />
-              </TouchableOpacity>
-            </View>
-          ))}
-          </Animated.View>
+            ))}
+            </Animated.View>
+          </View>
         </View>
       </View>
 
@@ -480,20 +496,26 @@ const styles = StyleSheet.create({
   },
   taskList: {
     flex: 1,
-    padding: 12,
+    overflow: "hidden",
   },
-  taskListContent: {
-    width: "100%",
+  scrollContainer: {
+    flex: 1,
+    paddingHorizontal: 12,
+    paddingTop: 8,
   },
   taskItem: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 10,
+    paddingVertical: 12,
     paddingHorizontal: 8,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(51, 51, 51, 0.3)",
     gap: 12,
-    minHeight: 48,
+    minHeight: 52,
+  },
+  taskItemLast: {
+    borderBottomWidth: 0,
+    marginBottom: 8,
   },
   checkboxContainer: {
     padding: 2,
