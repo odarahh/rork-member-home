@@ -24,8 +24,8 @@ export default function MyProgressCard({
   tasksCompleted,
   totalTasks,
 }: MyProgressCardProps) {
-  const size = 140;
-  const strokeWidth = 10;
+  const size = 110;
+  const strokeWidth = 8;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const animatedValue = useRef(new Animated.Value(0)).current;
@@ -215,8 +215,8 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   circularProgressContainer: {
-    width: 140,
-    height: 140,
+    width: 110,
+    height: 110,
     justifyContent: "center",
     alignItems: "center",
     position: "relative",
@@ -229,9 +229,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   medalBadge: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     backgroundColor: "rgba(42, 42, 42, 0.6)",
     justifyContent: "center",
     alignItems: "center",
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     borderColor: "rgba(51, 51, 51, 0.4)",
   },
   medalEmoji: {
-    fontSize: 32,
+    fontSize: 26,
   },
   progressTextContainer: {
     flexDirection: "row",
