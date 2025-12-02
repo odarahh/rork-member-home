@@ -328,7 +328,7 @@ export default function TaskListCard() {
                   style={styles.infoButton}
                   onPress={() => openTaskDetail(task)}
                 >
-                  <Info size={18} color="#4089FF" strokeWidth={2} />
+                  <Info size={16} color="#4089FF" strokeWidth={2} />
                 </TouchableOpacity>
               </View>
             ))}
@@ -500,24 +500,21 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flex: 1,
-    paddingHorizontal: 12,
-    paddingTop: 8,
     overflow: "hidden",
   },
   taskItem: {
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 12,
-    paddingHorizontal: 8,
+    paddingHorizontal: 12,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(51, 51, 51, 0.3)",
     gap: 12,
     minHeight: 52,
-    width: "100%",
   },
   taskItemLast: {
     borderBottomWidth: 0,
-    marginBottom: 8,
+    paddingBottom: 8,
   },
   checkboxContainer: {
     padding: 2,
@@ -564,11 +561,11 @@ const styles = StyleSheet.create({
     textDecorationLine: "line-through",
   },
   infoButton: {
-    padding: 8,
+    padding: 6,
     borderRadius: 10,
     backgroundColor: "rgba(64, 137, 255, 0.1)",
-    minWidth: 36,
-    minHeight: 36,
+    width: 32,
+    height: 32,
     justifyContent: "center",
     alignItems: "center",
     flexShrink: 0,
