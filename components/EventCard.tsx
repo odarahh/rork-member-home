@@ -102,6 +102,7 @@ export default function EventCard({
 
 const styles = StyleSheet.create({
   container: {
+    width: 320,
     borderRadius: 24,
     overflow: "hidden",
     borderWidth: 1,

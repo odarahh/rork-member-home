@@ -65,17 +65,52 @@ export default function ProgressScreen() {
 
           <View style={styles.eventsSection}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Próximo evento</Text>
+              <Text style={styles.sectionTitle}>Eventos</Text>
             </View>
-            <EventCard
-              title="Tech Conference 2025"
-              description="Participe do maior evento de tecnologia do ano com palestrantes renomados, networking e workshops práticos sobre as últimas tendências em desenvolvimento."
-              link="https://exemplo.com/evento-tech-2025"
-              location="Centro de Convenções - São Paulo, SP"
-              date="15 de Dezembro, 2025"
-              startTime="09:00"
-              endTime="18:00"
-            />
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.eventsScrollContent}
+              snapToInterval={320}
+              decelerationRate="fast"
+            >
+              <EventCard
+                title="Tech Conference 2025"
+                description="Participe do maior evento de tecnologia do ano com palestrantes renomados, networking e workshops práticos sobre as últimas tendências em desenvolvimento."
+                link="https://exemplo.com/evento-tech-2025"
+                location="Centro de Convenções - São Paulo, SP"
+                date="15 de Dezembro, 2025"
+                startTime="09:00"
+                endTime="18:00"
+              />
+              <EventCard
+                title="Workshop de React Native"
+                description="Aprenda as melhores práticas de desenvolvimento mobile com React Native. Construa apps performáticos e escaláveis com instruções hands-on."
+                link="https://exemplo.com/workshop-react-native"
+                location="Tech Hub - Rio de Janeiro, RJ"
+                date="22 de Dezembro, 2025"
+                startTime="14:00"
+                endTime="17:00"
+              />
+              <EventCard
+                title="Meetup Desenvolvedores"
+                description="Encontro mensal da comunidade de desenvolvedores. Networking, talks relâmpago e discussões sobre as últimas tecnologias do mercado."
+                link="https://exemplo.com/meetup-dev"
+                location="Coworking Space - Belo Horizonte, MG"
+                date="5 de Janeiro, 2026"
+                startTime="19:00"
+                endTime="22:00"
+              />
+              <EventCard
+                title="Hackathon 48h"
+                description="Desafio de programação intensivo de 48 horas. Forme equipes, resolva problemas reais e concorra a prêmios incríveis. Alimentação e coffee break inclusos."
+                link="https://exemplo.com/hackathon-48h"
+                location="Universidade Federal - Brasília, DF"
+                date="12 de Janeiro, 2026"
+                startTime="08:00"
+                endTime="20:00"
+              />
+            </ScrollView>
           </View>
 
           <View style={styles.notificationsSection}>
@@ -272,6 +307,10 @@ const styles = StyleSheet.create({
   },
   eventsSection: {
     marginTop: 24,
+  },
+  eventsScrollContent: {
+    gap: 16,
+    paddingRight: 16,
   },
   sectionHeader: {
     marginBottom: 12,
