@@ -42,7 +42,6 @@ export default function ProgressScreen() {
           { paddingTop: insets.top + 20, paddingBottom: insets.bottom + 40 },
         ]}
         showsVerticalScrollIndicator={false}
-        collapsable={false}
       >
         <LinearGradient
           colors={["#0a0a0a", "#0f0f0f", "#0a0a0a"]}
